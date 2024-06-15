@@ -1,42 +1,30 @@
 package com.zero.account.domain;
 
-import com.zero.account.type.AccountStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+@Setter
 @Getter
-@Entity
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Account {
-
+public class AccountUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private AccountUser accountUser;
-    private String accountNumber;
-
-    @Enumerated(EnumType.STRING)
-    private AccountStatus accountStatus;
-    private Long balance;
-
-    private LocalDateTime registeredAt;
-    private LocalDateTime unRegisteredAt;
+    private String name;
 
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
 }

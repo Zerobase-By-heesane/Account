@@ -1,7 +1,7 @@
 package com.zero.account.service;
 
 import com.zero.account.domain.Account;
-import com.zero.account.domain.AccountStatus;
+import com.zero.account.type.AccountStatus;
 import com.zero.account.repository.AccountRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,9 +10,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 
