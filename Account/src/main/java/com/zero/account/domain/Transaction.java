@@ -1,6 +1,5 @@
 package com.zero.account.domain;
 
-import com.zero.account.type.AccountStatus;
 import com.zero.account.type.TransactionResultType;
 import com.zero.account.type.TransactionType;
 import jakarta.persistence.*;

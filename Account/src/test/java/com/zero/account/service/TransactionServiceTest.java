@@ -9,8 +9,6 @@ import com.zero.account.repository.AccountRepository;
 import com.zero.account.repository.AccountUserRepository;
 import com.zero.account.repository.TransactionRepository;
 import com.zero.account.type.AccountStatus;
-import com.zero.account.type.TransactionResultType;
-import com.zero.account.type.TransactionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,12 +19,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -47,7 +43,7 @@ class TransactionServiceTest {
 
     @DisplayName("결제 성공")
     @Test
-    void successUseBalance(){
+    void successUseBalance() {
         //given
         AccountUser accountUser = AccountUser.builder()
                 .id(1L)
@@ -87,7 +83,7 @@ class TransactionServiceTest {
         TransactionDTO transactionDTO = transactionService.useBalance(
                 1L, "1000000002", 900L);
         //then
-        verify(transactionRepository,times(1)).save(captor.capture());
+        verify(transactionRepository, times(1)).save(captor.capture());
         assertEquals(transactionDTO.getAccountNumber(), "1000000002");
         assertEquals(captor.getValue().getAmount(), 900L);
         assertEquals(transactionDTO.getTransactionId(), "1234567890");
@@ -97,7 +93,7 @@ class TransactionServiceTest {
 
     @DisplayName("결제 실패 - 유저가 없음")
     @Test
-    void useBalance_UserNotFound(){
+    void useBalance_UserNotFound() {
         //given
         given(accountUserRepository.findById(1L))
                 .willReturn(Optional.empty());
@@ -108,7 +104,7 @@ class TransactionServiceTest {
 
     @DisplayName("결제 실패 - 계좌가 없음")
     @Test
-    void useBalance_AccountNotFound(){
+    void useBalance_AccountNotFound() {
         //given
         AccountUser accountUser = AccountUser.builder()
                 .id(1L)
@@ -127,7 +123,7 @@ class TransactionServiceTest {
 
     @DisplayName("결제 실패 - 계좌와 유저 불일치")
     @Test
-    void useBalance_AccountUserUnmatched(){
+    void useBalance_AccountUserUnmatched() {
         //given
         AccountUser accountUser = AccountUser.builder()
                 .id(1L)
@@ -155,7 +151,7 @@ class TransactionServiceTest {
 
     @DisplayName("결제 실패 - 계좌가 사용중이 아님")
     @Test
-    void useBalance_AccountNotInUse(){
+    void useBalance_AccountNotInUse() {
         //given
         AccountUser accountUser = AccountUser.builder()
                 .id(1L)
@@ -180,7 +176,7 @@ class TransactionServiceTest {
 
     @DisplayName("결제 실패 - 잔액 부족")
     @Test
-    void useBalance_AmountExceedBalance(){
+    void useBalance_AmountExceedBalance() {
         //given
         AccountUser accountUser = AccountUser.builder()
                 .id(1L)
@@ -205,7 +201,7 @@ class TransactionServiceTest {
 
     @DisplayName("결제 실패 - 소유주와 사용자가 다름")
     @Test
-    void useBalance_OwnerAndUserDifferent(){
+    void useBalance_OwnerAndUserDifferent() {
         //given
         AccountUser accountUser = AccountUser.builder()
                 .id(1L)

@@ -1,7 +1,6 @@
 package com.zero.account.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zero.account.domain.AccountUser;
 import com.zero.account.dto.TransactionDTO;
 import com.zero.account.dto.UseBalance;
 import com.zero.account.service.TransactionService;
@@ -53,7 +52,7 @@ class TransactionControllerTest {
         //then
         mockMvc.perform(post("/transaction/use")
                         .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(new UseBalance.Request(1L,"1000000002",900L))))
+                        .content(objectMapper.writeValueAsString(new UseBalance.Request(1L, "1000000002", 900L))))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accountNumber").value("1000000002"))
