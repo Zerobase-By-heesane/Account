@@ -1,11 +1,10 @@
 package com.zero.account.domain;
 
+import com.zero.account.exception.AccountException;
 import com.zero.account.type.AccountStatus;
+import com.zero.account.type.ErrorCode;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -43,5 +42,12 @@ public class Account {
     public void unRegister() {
         this.accountStatus = AccountStatus.UNREGISTERED;
         this.unRegisteredAt = LocalDateTime.now();
+    }
+
+    public void useBalance(Long amount) {
+        if(amount > this.balance) {
+            throw new AccountException(ErrorCode.AMOUNT_EXCEED_BALANCE);
+        }
+        this.balance = this.balance - amount;
     }
 }
