@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestController
-@RequiredArgsConstructor
 
+@RequiredArgsConstructor
+@RestController
 public class AccountController {
     private final AccountService accountService;
     private final RedisTestService redisTestService;
