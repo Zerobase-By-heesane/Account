@@ -37,7 +37,7 @@ public class UseBalance {
         private TransactionResultType transactionResultType;
         private String transactionId;
         private Long amount;
-        private LocalDateTime transactionAt;
+        private LocalDateTime transactedAt;
 
 
         public static Response toResponse(TransactionDTO transactionDTO) {
@@ -46,7 +46,7 @@ public class UseBalance {
                     .transactionResultType(transactionDTO.getTransactionResultType())
                     .transactionId(transactionDTO.getTransactionId())
                     .amount(transactionDTO.getAmount())
-                    .transactionAt(transactionDTO.getTransactedAt())
+                    .transactedAt(transactionDTO.getTransactedAt())
                     .build();
         }
     }

@@ -1,7 +1,5 @@
 package com.zero.account.controller;
 
-import com.zero.account.dto.CreatedAccount;
-import com.zero.account.dto.TransactionDTO;
 import com.zero.account.dto.UseBalance;
 import com.zero.account.exception.AccountException;
 import com.zero.account.service.TransactionService;
@@ -27,20 +25,20 @@ public class TransactionController {
 
     @PostMapping("/transaction/use")
     public UseBalance.Response transactionUse(
-            @RequestBody @Valid UseBalance.Request createdAccount
+            @RequestBody @Valid UseBalance.Request useBalanceRequest
     ){
         try{
-            return UseBalance.Response.toResponse(transactionService.saveTransaction(
-                    createdAccount.getUserId(),
-                    createdAccount.getAccountNumber(),
-                    createdAccount.getAmount()
+            return UseBalance.Response.toResponse(transactionService.useBalance(
+                    useBalanceRequest.getUserId(),
+                    useBalanceRequest.getAccountNumber(),
+                    useBalanceRequest.getAmount()
             ));
         } catch (AccountException ex){
             log.error("transactionUse error", ex);
 
             transactionService.saveFailedUseTransaction(
-                    createdAccount.getAccountNumber(),
-                    createdAccount.getAmount()
+                    useBalanceRequest.getAccountNumber(),
+                    useBalanceRequest.getAmount()
             );
 
             throw ex;

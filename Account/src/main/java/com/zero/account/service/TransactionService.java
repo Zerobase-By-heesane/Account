@@ -31,9 +31,9 @@ public class TransactionService {
     private final AccountRepository accountRepository;
 
     @Transactional
-    public TransactionDTO saveTransaction(Long userId,
-                                          String accountNumber,
-                                          Long amount ) {
+    public TransactionDTO useBalance(Long userId,
+                                     String accountNumber,
+                                     Long amount ) {
         AccountUser accountUser = accountUserRepository.findById(userId)
                 .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
 
