@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zero.account.dto.AccountDTO;
 import com.zero.account.dto.CreatedAccount;
 import com.zero.account.dto.DeleteAccount;
-import com.zero.account.repository.AccountRepository;
 import com.zero.account.service.AccountService;
 import com.zero.account.service.RedisTestService;
 import org.junit.jupiter.api.DisplayName;
@@ -30,20 +29,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(AccountController.class)
 class AccountControllerTest {
 
+    @MockBean
+    private AccountService accountService;
 
     @MockBean
     private RedisTestService redisTestService;
-
-    @MockBean
-    private AccountService accountService;
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
-    @Autowired
-    private AccountRepository accountRepository;
 
     @DisplayName("")
     @Test
@@ -51,8 +47,9 @@ class AccountControllerTest {
         //given
         given(accountService.createAccount(anyLong(), anyLong()))
                 .willReturn(AccountDTO.builder()
-                        .userId(1L)
+                        .userId(3333L)
                         .accountNumber("1234567890")
+                        .balance(10000L)
                         .registeredAt(LocalDateTime.now())
                         .unRegisteredAt(LocalDateTime.now())
                         .build());
@@ -61,10 +58,10 @@ class AccountControllerTest {
         mockMvc.perform(post("/account")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
-                                new CreatedAccount.Request(3333L, 1111L)))
+                                new CreatedAccount.Request(3333L, 10000L)))
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.userId").value(1L))
+                .andExpect(jsonPath("$.userId").value(3333L))
                 .andExpect(jsonPath("$.accountNumber").value("1234567890"))
                 .andDo(print());
 
