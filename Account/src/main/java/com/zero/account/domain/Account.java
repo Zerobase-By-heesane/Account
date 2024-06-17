@@ -50,4 +50,11 @@ public class Account {
         }
         this.balance = this.balance - amount;
     }
+
+    public void cancelUseBalance(Long amount) {
+        if(amount < 0){
+            throw new AccountException(ErrorCode.INVALID_REQUEST);
+        }
+        this.balance = this.balance + amount;
+    }
 }
