@@ -3,7 +3,6 @@ package com.zero.account.service;
 import com.zero.account.domain.Account;
 import com.zero.account.domain.AccountUser;
 import com.zero.account.dto.AccountDTO;
-import com.zero.account.dto.AccountInfo;
 import com.zero.account.exception.AccountException;
 import com.zero.account.repository.AccountRepository;
 import com.zero.account.repository.AccountUserRepository;
@@ -37,7 +36,7 @@ public class AccountService {
         validateCreateAccount(accountUser);
 
         String newAccountNumber = accountRepository.findFirstByOrderByIdDesc()
-                .map(account -> Integer.valueOf(account.getAccountNumber()) + 1+"")
+                .map(account -> Integer.valueOf(account.getAccountNumber()) + 1 + "")
                 .orElse("1000000000");
 
         return AccountDTO.toAccountDto(accountRepository.save(
@@ -51,14 +50,14 @@ public class AccountService {
     }
 
     private void validateCreateAccount(AccountUser accountUser) {
-        if(accountRepository.countByAccountUser(accountUser) == 10){
+        if (accountRepository.countByAccountUser(accountUser) == 10) {
             throw new AccountException(ErrorCode.MAX_ACCOUNT_PER_USER_10);
         }
     }
 
     @Transactional
-    public Account getAccount(Long id){
-        if(id<0){
+    public Account getAccount(Long id) {
+        if (id < 0) {
             throw new RuntimeException("minus id");
         }
         return accountRepository.findById(id).get();
@@ -83,15 +82,15 @@ public class AccountService {
     }
 
     private void validateDeleteAccount(AccountUser accountUser, Account account) {
-        if(!Objects.equals(accountUser.getId(),account.getAccountUser().getId())){
+        if (!Objects.equals(accountUser.getId(), account.getAccountUser().getId())) {
             throw new AccountException(ErrorCode.USER__ACCOUNT_UNMATCHED);
         }
 
-        if(account.getAccountStatus() == AccountStatus.UNREGISTERED){
+        if (account.getAccountStatus() == AccountStatus.UNREGISTERED) {
             throw new AccountException(ErrorCode.ACCOUNT_ALREADY_UNREGISTERED);
         }
 
-        if(account.getBalance() != 0){
+        if (account.getBalance() != 0) {
             throw new AccountException(ErrorCode.BALANCE_NOT_EMPTY);
         }
     }

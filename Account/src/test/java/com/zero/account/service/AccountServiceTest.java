@@ -109,9 +109,6 @@ public class AccountServiceTest {
         given(accountUserRepository.findById(anyLong()))
                 .willReturn(Optional.empty());
 
-        ArgumentCaptor<Account> captor = ArgumentCaptor.forClass(Account.class);
-
-
         //when
         AccountException accountException = assertThrows(AccountException.class,
                 () -> accountService.createAccount(1L, 1000L)

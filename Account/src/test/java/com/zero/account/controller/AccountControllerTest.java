@@ -1,7 +1,6 @@
 package com.zero.account.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zero.account.domain.AccountUser;
 import com.zero.account.dto.AccountDTO;
 import com.zero.account.dto.CreatedAccount;
 import com.zero.account.dto.DeleteAccount;
@@ -18,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -74,7 +72,7 @@ class AccountControllerTest {
 
     @DisplayName("")
     @Test
-    void successDeleteAccount() throws  Exception{
+    void successDeleteAccount() throws Exception {
         //given
         given(accountService.deleteAccount(anyLong(), anyString()))
                 .willReturn(AccountDTO.builder()
