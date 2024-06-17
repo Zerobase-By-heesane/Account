@@ -37,6 +37,7 @@ dependencies {
     // Redis
     implementation 'org.redisson:redisson:3.17.1'
     implementation ( 'com.github.codemonstur:embedded-redis:1.4.3' )
+    implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
 }
 
 tasks.named('test') {
