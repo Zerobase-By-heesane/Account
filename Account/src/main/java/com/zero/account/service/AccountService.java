@@ -3,6 +3,7 @@ package com.zero.account.service;
 import com.zero.account.domain.Account;
 import com.zero.account.domain.AccountUser;
 import com.zero.account.dto.AccountDTO;
+import com.zero.account.dto.AccountInfo;
 import com.zero.account.exception.AccountException;
 import com.zero.account.repository.AccountRepository;
 import com.zero.account.repository.AccountUserRepository;
@@ -13,7 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -91,5 +94,18 @@ public class AccountService {
         if(account.getBalance() != 0){
             throw new AccountException(ErrorCode.BALANCE_NOT_EMPTY);
         }
+    }
+
+    @Transactional
+    public List<AccountDTO> getAccountByUserId(Long userId) {
+        AccountUser accountUser = accountUserRepository.findById(userId).orElseThrow(
+                () -> new AccountException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        List<Account> accounts = accountRepository.findAllByAccountUser(accountUser);
+
+        return accounts.stream()
+                .map(AccountDTO::toAccountDto)
+                .collect(Collectors.toList());
     }
 }

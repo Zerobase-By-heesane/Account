@@ -2,6 +2,7 @@ package com.zero.account.controller;
 
 import com.zero.account.domain.Account;
 import com.zero.account.dto.AccountDTO;
+import com.zero.account.dto.AccountInfo;
 import com.zero.account.dto.CreatedAccount;
 import com.zero.account.dto.DeleteAccount;
 import com.zero.account.service.AccountService;
@@ -9,6 +10,9 @@ import com.zero.account.service.RedisTestService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,6 +37,20 @@ public class AccountController {
         return DeleteAccount.Response.toResponse(
                 accountService.deleteAccount(deleteAccount.getUserId(), deleteAccount.getAccountNumber())
         );
+    }
+
+    @GetMapping("/account")
+    public List<AccountInfo> getAccountList(
+            @RequestParam("user_id") Long userId
+    ){
+        return accountService.getAccountByUserId(userId)
+                .stream()
+                .map(accountDTO -> AccountInfo.builder()
+                        .accountNumber(accountDTO.getAccountNumber())
+                        .balance(accountDTO.getBalance())
+                        .build())
+                .collect(Collectors.toList());
+
     }
 
     @GetMapping("/get-lock")

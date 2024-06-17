@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -292,6 +293,61 @@ public class AccountServiceTest {
         );
         //then
         assertEquals(ErrorCode.ACCOUNT_ALREADY_UNREGISTERED, accountException.getErrorCode());
+    }
+
+    @DisplayName("")
+    @Test
+    void successGetAccountByUserId(){
+        //given
+
+        AccountUser accountUser = AccountUser.builder()
+                .id(1L)
+                .name("test")
+                .build();
+
+        List<Account> accountDTOs = List.of(
+                Account.builder()
+                        .accountUser(accountUser)
+                        .accountNumber("1234567890")
+                        .balance(1000L)
+                        .build(),
+                Account.builder()
+                        .accountUser(accountUser)
+                        .accountNumber("1111111111")
+                        .balance(2000L)
+                        .build(),
+                Account.builder()
+                        .accountUser(accountUser)
+                        .accountNumber("2222222222")
+                        .balance(3000L)
+                        .build()
+        );
+        given(accountUserRepository.findById(anyLong())).willReturn(Optional.of(accountUser));
+        given(accountRepository.findAllByAccountUser(any())).willReturn(accountDTOs);
+
+        //when
+        List<AccountDTO> accountDTOList = accountService.getAccountByUserId(1L);
+
+        //then
+        assertEquals(3, accountDTOList.size());
+        assertEquals("1234567890", accountDTOList.get(0).getAccountNumber());
+        assertEquals(1000L, accountDTOList.get(0).getBalance());
+        assertEquals("1111111111", accountDTOList.get(1).getAccountNumber());
+        assertEquals(2000L, accountDTOList.get(1).getBalance());
+        assertEquals("2222222222", accountDTOList.get(2).getAccountNumber());
+        assertEquals(3000L, accountDTOList.get(2).getBalance());
+    }
+
+    @DisplayName("")
+    @Test
+    void failToGetAccountInfo(){
+        //given
+        given(accountUserRepository.findById(anyLong())).willReturn(Optional.empty());
+        //when
+        AccountException accountException = assertThrows(AccountException.class,
+                () -> accountService.deleteAccount(15L, "1000000015"));
+        //then
+        assertEquals(ErrorCode.USER_NOT_FOUND, accountException.getErrorCode());
     }
 }
 
