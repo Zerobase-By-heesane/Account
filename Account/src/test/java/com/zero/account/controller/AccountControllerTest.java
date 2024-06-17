@@ -3,6 +3,7 @@ package com.zero.account.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zero.account.dto.AccountDTO;
 import com.zero.account.dto.CreatedAccount;
+import com.zero.account.dto.DeleteAccount;
 import com.zero.account.service.AccountService;
 import com.zero.account.service.RedisTestService;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +17,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -64,29 +67,27 @@ class AccountControllerTest {
 
     }
 
-
-//    @DisplayName("계좌 조회 성공")
-//    @Test
-//    void successGetAccount() throws Exception {
-//        //given
-//        given(accountRepository.findById(anyLong()))
-//                .willReturn(Optional.of(Account.builder()
-//                        .accountStatus(AccountStatus.UNREGISTERED)
-//                        .accountNumber("65789").build()));
-//
-//        ArgumentCaptor<Long> captor = ArgumentCaptor.forClass(Long.class);
-//
-//        //when
-//        Account account = accountService.getAccount(4555L);
-//
-//        //then
-//        verify(accountRepository,times(1)).findById(captor.capture());
-//        verify(accountRepository,times(0)).save(any());
-//        assertEquals(4555L, captor.getValue());
-//        assertNotEquals(45515L, captor.getValue());
-//        assertEquals("65789", account.getAccountNumber());
-//        assertEquals(AccountStatus.IN_USE, account.getAccountStatus());
-//    }
-
-
+    @DisplayName("")
+    @Test
+    void successDeleteAccount() throws  Exception{
+        //given
+        given(accountService.deleteAccount(anyLong(), anyString()))
+                .willReturn(AccountDTO.builder()
+                        .userId(1L)
+                        .accountNumber("1234567890")
+                        .registeredAt(LocalDateTime.now())
+                        .unRegisteredAt(LocalDateTime.now())
+                        .build());
+        //when
+        //then
+        mockMvc.perform(delete("/account")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                new DeleteAccount.Request(3333L, "1234567890")))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.userId").value(1L))
+                .andExpect(jsonPath("$.accountNumber").value("1234567890"))
+                .andDo(print());
+    }
 }

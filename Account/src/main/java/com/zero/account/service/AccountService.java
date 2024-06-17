@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 
 @Service
@@ -58,5 +59,37 @@ public class AccountService {
             throw new RuntimeException("minus id");
         }
         return accountRepository.findById(id).get();
+    }
+
+    @Transactional
+    public AccountDTO deleteAccount(Long userId, String accountNumber) {
+
+        AccountUser accountUser = accountUserRepository.findById(userId).orElseThrow(
+                () -> new AccountException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        Account account = accountRepository.findByAccountNumber(accountNumber).orElseThrow(
+                () -> new AccountException(ErrorCode.ACCOUNT_NOT_FOUND)
+        );
+
+        validateDeleteAccount(accountUser, account);
+
+        account.unRegister();
+        accountRepository.save(account);
+        return AccountDTO.toAccountDto(account);
+    }
+
+    private void validateDeleteAccount(AccountUser accountUser, Account account) {
+        if(!Objects.equals(accountUser.getId(),account.getAccountUser().getId())){
+            throw new AccountException(ErrorCode.USER__ACCOUNT_UNMATCHED);
+        }
+
+        if(account.getAccountStatus() == AccountStatus.UNREGISTERED){
+            throw new AccountException(ErrorCode.ACCOUNT_ALREADY_UNREGISTERED);
+        }
+
+        if(account.getBalance() != 0){
+            throw new AccountException(ErrorCode.BALANCE_NOT_EMPTY);
+        }
     }
 }
