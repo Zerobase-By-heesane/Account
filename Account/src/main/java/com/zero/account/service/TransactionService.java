@@ -130,4 +130,11 @@ public class TransactionService {
                         .build()
         );
     }
+
+    public TransactionDTO queryTransaction(String transactionId) {
+        return TransactionDTO.toTransactionDTO(
+                transactionRepository.findByTransactionId(transactionId)
+                        .orElseThrow(() -> new AccountException(ErrorCode.TRANSACTION_NOT_FOUND))
+        );
+    }
 }
