@@ -1,15 +1,14 @@
 package com.zero.account.controller;
 
 import com.zero.account.dto.CancelUseBalance;
+import com.zero.account.dto.QueryTransactionResponse;
 import com.zero.account.dto.UseBalance;
 import com.zero.account.exception.AccountException;
 import com.zero.account.service.TransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * TransactionController
@@ -66,5 +65,15 @@ public class TransactionController {
 
             throw ex;
         }
+    }
+
+    @GetMapping("/transaction/{transactionId}")
+    public QueryTransactionResponse.Response getTransactionInfo(
+            @PathVariable String transactionId
+    ){
+        transactionService.queryTransaction(transactionId);
+        return QueryTransactionResponse.toResponse(
+                transactionService.queryTransaction(transactionId)
+        );
     }
 }
