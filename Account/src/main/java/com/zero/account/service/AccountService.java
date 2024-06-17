@@ -22,21 +22,15 @@ public class AccountService {
     private final AccountRepository accountRepository;
 
     private final AccountUserRepository accountUserRepository;
-    /**
-     *
-     * @param userId
-     * 사용자 조회
-     * @param initialBalance
-     *
-     * 계좌번호 생성
-     * 계좌 저장 및 반환
-     */
+
     @Transactional
     public AccountDTO createAccount(Long userId, Long initialBalance) {
 
         AccountUser accountUser = accountUserRepository.findById(userId).orElseThrow(
                 () -> new AccountException(ErrorCode.USER_NOT_FOUND)
         );
+
+        validateCreateAccount(accountUser);
 
         String newAccountNumber = accountRepository.findFirstByOrderByIdDesc()
                 .map(account -> Integer.valueOf(account.getAccountNumber()) + 1+"")
@@ -50,6 +44,12 @@ public class AccountService {
                         .balance(initialBalance)
                         .registeredAt(LocalDateTime.now())
                         .build()));
+    }
+
+    private void validateCreateAccount(AccountUser accountUser) {
+        if(accountRepository.countByAccountUser(accountUser) == 10){
+            throw new AccountException(ErrorCode.MAX_ACCOUNT_PER_USER_10);
+        }
     }
 
     @Transactional
