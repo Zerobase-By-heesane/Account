@@ -470,7 +470,7 @@ class TransactionServiceTest {
         assertEquals(accountException.getErrorCode(), ErrorCode.TOO_OLD_ORDER_TO_CANCEL);
     }
 
-    @DisplayName("")
+    @DisplayName("Query Transaction 성공")
     @Test
     void successQueryTransaction(){
         //given

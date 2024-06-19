@@ -292,7 +292,7 @@ public class AccountServiceTest {
         assertEquals(ErrorCode.ACCOUNT_ALREADY_UNREGISTERED, accountException.getErrorCode());
     }
 
-    @DisplayName("")
+    @DisplayName("User ID로 계좌 조회 성공")
     @Test
     void successGetAccountByUserId(){
         //given
@@ -335,7 +335,7 @@ public class AccountServiceTest {
         assertEquals(3000L, accountDTOList.get(2).getBalance());
     }
 
-    @DisplayName("")
+    @DisplayName("AccountInfo 조회 실패")
     @Test
     void failToGetAccountInfo(){
         //given

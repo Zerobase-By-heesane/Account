@@ -1,11 +1,14 @@
 package com.zero.account.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zero.account.domain.Account;
 import com.zero.account.dto.AccountDTO;
 import com.zero.account.dto.CreatedAccount;
 import com.zero.account.dto.DeleteAccount;
+import com.zero.account.exception.AccountException;
 import com.zero.account.service.AccountService;
-import com.zero.account.service.RedisTestService;
+import com.zero.account.type.AccountStatus;
+import com.zero.account.type.ErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,16 +35,13 @@ class AccountControllerTest {
     @MockBean
     private AccountService accountService;
 
-    @MockBean
-    private RedisTestService redisTestService;
-
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    @DisplayName("")
+    @DisplayName("계좌 생성 성공")
     @Test
     void successCreateAccount() throws Exception {
         //given
@@ -67,7 +67,7 @@ class AccountControllerTest {
 
     }
 
-    @DisplayName("")
+    @DisplayName("계좌 삭제 성공")
     @Test
     void successDeleteAccount() throws Exception {
         //given
@@ -91,7 +91,7 @@ class AccountControllerTest {
                 .andDo(print());
     }
 
-    @DisplayName("")
+    @DisplayName("계좌 조회 성공 - QueryParam")
     @Test
     void successGetAccount() throws Exception {
         //given
@@ -125,5 +125,36 @@ class AccountControllerTest {
                 .andExpect(jsonPath("$[2].balance").value(1000L));
     }
 
+    @DisplayName("계좌 조회 성공 - PathVariable")
+    @Test
+    void GetAccountInfo() throws Exception {
+        //given
+        given(accountService.getAccount(anyLong()))
+                .willReturn(Account.builder()
+                        .accountNumber("1234567890")
+                        .accountStatus(AccountStatus.IN_USE)
+                        .balance(1000L).build());
+        //when
+        //then
+        mockMvc.perform(get("/account/876"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accountNumber").value("1234567890"))
+                .andExpect(jsonPath("$.accountStatus").value("IN_USE"));
+    }
 
+    @DisplayName("계좌 조회 실패 - 계좌 존재하지 않음")
+    @Test
+    void failGetAccount2() throws Exception {
+        //given
+        given(accountService.getAccount(anyLong()))
+                .willThrow(new AccountException(ErrorCode.ACCOUNT_NOT_FOUND));
+        //when
+        //then
+        mockMvc.perform(get("/account/876"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.errorCode").value("ACCOUNT_NOT_FOUND"))
+                .andExpect(jsonPath("$.errorMessage").value("계좌가 존재하지 않습니다."));
+    }
 }

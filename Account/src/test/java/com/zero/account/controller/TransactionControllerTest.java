@@ -1,12 +1,10 @@
 package com.zero.account.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zero.account.dto.AccountDTO;
-import com.zero.account.dto.CancelUseBalance;
+import com.zero.account.dto.CancelBalance;
 import com.zero.account.dto.TransactionDTO;
 import com.zero.account.dto.UseBalance;
 import com.zero.account.service.TransactionService;
-import com.zero.account.type.TransactionResultType;
 import com.zero.account.type.TransactionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +14,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static com.zero.account.type.TransactionResultType.S;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -40,6 +37,7 @@ class TransactionControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @DisplayName("잔액 사용 성공")
     @Test
     void successUseBalance() throws Exception {
         //given
@@ -68,6 +66,7 @@ class TransactionControllerTest {
                 .andExpect(jsonPath("$.transactedAt").exists());
     }
 
+    @DisplayName("잔액 취소 성공")
     @Test
     void successCancelBalance() throws Exception {
         //given
@@ -86,7 +85,7 @@ class TransactionControllerTest {
         //then
         mockMvc.perform(post("/transaction/cancel")
                         .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(new CancelUseBalance.Request("transactionId", "1000000002", 900L))))
+                        .content(objectMapper.writeValueAsString(new CancelBalance.Request("transactionId", "1000000002", 900L))))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accountNumber").value("1000000002"))
@@ -97,7 +96,7 @@ class TransactionControllerTest {
 
     }
 
-    @DisplayName("")
+    @DisplayName("Query Transaction 성공")
     @Test
     void successQueryTransaction() throws Exception {
         //given
