@@ -1,5 +1,6 @@
 package com.zero.account.dto;
 
+import com.zero.account.aop.AccountLockIdInterface;
 import com.zero.account.type.TransactionResultType;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -9,7 +10,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 
-public class CancelUseBalance {
+public class CancelBalance {
 
     /**
      * {
@@ -22,7 +23,7 @@ public class CancelUseBalance {
     @Getter
     @Setter
     @AllArgsConstructor
-    public static class Request {
+    public static class Request implements AccountLockIdInterface {
 
         @NotBlank
         private String transactionId;
@@ -50,7 +51,7 @@ public class CancelUseBalance {
     @Getter
     @Setter
     @AllArgsConstructor
-    public static class Response {
+    public static class Response implements AccountLockIdInterface{
 
         private String accountNumber;
         private TransactionResultType transactionResultType;
