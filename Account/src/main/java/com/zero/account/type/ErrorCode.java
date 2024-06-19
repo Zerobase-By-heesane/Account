@@ -21,7 +21,7 @@ public enum ErrorCode {
     TRANSACTION_ALREADY_CANCELED_OR_FAILED("이미 취소 또는 실패한 거래입니다."),
     CANCEL_MUST_FULLY("전체 취소만 가능합니다."),
     TOO_OLD_ORDER_TO_CANCEL("1년지 지난 거래는 취소할 수 없습니다."),
-    INVALID_REQUEST("잘못된 요청입니다.");
+    INVALID_REQUEST("잘못된 요청입니다."), INTERNAL_SERVER_ERROR("서버 내부 오류가 발생했습니다."), ACCOUNT_TRANSACTION_LOCK("해당 계좌는 사용 중입니다.");
 
     private final String description;
 }
