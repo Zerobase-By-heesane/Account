@@ -6,7 +6,6 @@ import com.zero.account.dto.AccountInfo;
 import com.zero.account.dto.CreatedAccount;
 import com.zero.account.dto.DeleteAccount;
 import com.zero.account.service.AccountService;
-import com.zero.account.service.RedisTestService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,6 @@ import java.util.stream.Collectors;
 @RestController
 public class AccountController {
     private final AccountService accountService;
-    private final RedisTestService redisTestService;
 
     @PostMapping("/account")
     public CreatedAccount.Response createAccount(
@@ -42,7 +40,7 @@ public class AccountController {
     @GetMapping("/account")
     public List<AccountInfo> getAccountList(
             @RequestParam("user_id") Long userId
-    ){
+    ) {
         return accountService.getAccountByUserId(userId)
                 .stream()
                 .map(accountDTO -> AccountInfo.builder()
@@ -52,12 +50,6 @@ public class AccountController {
                 .collect(Collectors.toList());
 
     }
-
-    @GetMapping("/get-lock")
-    public String getLock() {
-        return redisTestService.getLock();
-    }
-
 
     @GetMapping("/account/{id}")
     public Account getAccount(@PathVariable Long id) {
