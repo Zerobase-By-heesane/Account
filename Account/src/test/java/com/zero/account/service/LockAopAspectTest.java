@@ -1,6 +1,5 @@
 package com.zero.account.service;
 
-import com.zero.account.aop.AccountLockIdInterface;
 import com.zero.account.dto.UseBalance;
 import com.zero.account.exception.AccountException;
 import com.zero.account.type.ErrorCode;
@@ -13,7 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

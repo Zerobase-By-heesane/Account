@@ -35,7 +35,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class TransactionServiceTest {
 
-    public static final long USE_AMOUNT = 200L;
     public static final long CANCEL_AMOUNT = 1000L;
 
 
@@ -303,16 +302,12 @@ class TransactionServiceTest {
     @Test
     void cancelTransaction_AccountNotFound() {
         //given
-        AccountUser accountUser = AccountUser.builder()
-                .id(1L)
-                .name("test")
-                .build();
 
         given(transactionRepository.findByTransactionId(anyString()))
                 .willReturn(Optional.empty());
 
         //when
-        AccountException accountException = assertThrows(AccountException.class, () -> transactionService.cancelBalance("transactionId", "1000000002", 1000L));
+        assertThrows(AccountException.class, () -> transactionService.cancelBalance("transactionId", "1000000002", 1000L));
         //then
         assertThrows(AccountException.class, () -> transactionService.useBalance(1L, "1000000002", 900L));
     }
