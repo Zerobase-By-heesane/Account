@@ -1,0 +1,32 @@
+### 계좌 사용1
+POST http://localhost:8080/transaction/use
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "accountNumber": "1000000003",
+  "amount": 10000
+}
+
+### 계좌 사용2
+POST http://localhost:8080/transaction/use
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "accountNumber": "1000000003",
+  "amount": 10000
+}
+
+### 거래 취소
+POST http://localhost:8080/transaction/cancel
+Content-Type: application/json
+
+{
+  "transactionId": "3a322bc77970468bab80a8c032fc5554",
+  "accountNumber": "1000000003",
+  "amount": 10000
+}
+
+### 거래 확인
+GET http://localhost:8080/transaction/ce9afe344a214518babacb37339d21e2
