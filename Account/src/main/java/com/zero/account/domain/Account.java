@@ -3,41 +3,35 @@ package com.zero.account.domain;
 import com.zero.account.exception.AccountException;
 import com.zero.account.type.AccountStatus;
 import com.zero.account.type.ErrorCode;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Getter
-@Entity
-@Builder
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-public class Account {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@AllArgsConstructor
+@Builder
+@Entity
+public class Account extends BaseEntity{
 
     @ManyToOne
     private AccountUser accountUser;
+
     private String accountNumber;
 
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
+
     private Long balance;
 
     private LocalDateTime registeredAt;
-    private LocalDateTime unRegisteredAt;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
+    private LocalDateTime unRegisteredAt;
 
     public void unRegister() {
         this.accountStatus = AccountStatus.UNREGISTERED;
